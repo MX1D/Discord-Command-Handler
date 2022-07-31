@@ -1,11 +1,14 @@
 // Package imports
 import Discord, { GatewayIntentBits } from "discord.js";
-import dotenv from "dotenv";
-dotenv.config();
+import { readFileSync, writeFileSync } from "fs";
 
 // Initilazing the client
 const client = new Discord.Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 client.cooldowns = [];
+
+// Client read and write config file
+client.config = JSON.parse(readFileSync("./config.json"));
+client.saveConfig = () => { writeFileSync("./config.json", JSON.stringify(client.config, null, 4)); };
 
 // Command & event handlers imports
 import command_handler from "./handlers/command_handler.js";

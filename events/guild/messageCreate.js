@@ -6,10 +6,10 @@ export default {
 	description: "Client on recieve message event",
 	once: false,
 	function: function (client, Discord, message) {
+		if (!client.config.prefix) return;
 		if (message.author.bot) return;
-		const prefix = process.env.prefix;
-		if (!message.content.startsWith(prefix)) return; // prefix ;-;
-		const args = message.content.slice(prefix.length).split(/ +/); // message arguments
+		if (!message.content.startsWith(client.config.prefix)) return; // prefix ;-;
+		const args = message.content.slice(client.config.prefix.length).split(/ +/); // message arguments
 		const cmd = args.shift().toLowerCase(); // getting first word of the args which is the command
 		const command = client.commands.get(cmd) || client.commands.find((a) => a.aliases && a.aliases.includes(cmd)); // finding the command to see if it's in client.commands
 		if (command) {
