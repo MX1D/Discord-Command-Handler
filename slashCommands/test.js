@@ -2,7 +2,7 @@
 import { ApplicationCommandOptionType  } from "discord.js";
 
 export default {
-	name: "meow",
+	name: "test",
 	description: "testing",
 	permissions: ["Administrator"],
 	options: [{ name: "what", description: "you want what?", required: true, type: ApplicationCommandOptionType.String }],
