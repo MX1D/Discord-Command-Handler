@@ -3,15 +3,27 @@ import fs from "fs";
 
 export default {
 	function: async function (client, Discord) {
-		const command_files = fs.readdirSync("./slashCommands/").filter(file => file.endsWith(".js"));
+		const command_files = fs.readdirSync("./slashCommands/");
 
 		for (const file of command_files) {
-			const command = await import(`../slashCommands/${ file }`);
-			if (command.default.name) {
-				client.slashCommands.set(command.default.name, command.default);
-			} else {
-				continue;
+			let command;
+			if (file.endsWith(".js")) {
+				command = await import(`../slashCommands/${ file }`);
 			}
+			if (fs.statSync(`./slashCommands/${ file }`).isDirectory()) {
+				fs.readdirSync(`./slashCommands/${ file }`).forEach(async cmd => {
+					if (cmd.endsWith(".js")) {
+						const command = await import(`../slashCommands/${ file }/${ cmd }`);
+						client.slashCommands.set(command.default.name, command.default);
+					}
+				});
+				continue;
+			} else
+				if (command?.default?.name) {
+					client.slashCommands.set(command.default.name, command.default);
+				} else {
+					continue;
+				}
 		}
 	}
 };

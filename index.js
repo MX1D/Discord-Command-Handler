@@ -1,10 +1,11 @@
 // Package imports
-import Discord, { Intents } from "discord.js";
+import Discord, { GatewayIntentBits } from "discord.js";
 import dotenv from "dotenv";
 dotenv.config();
 
 // Initilazing the client
-const client = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Discord.Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+client.cooldowns = [];
 
 // Command & event handlers imports
 import command_handler from "./handlers/command_handler.js";
@@ -20,5 +21,4 @@ await slashCommands_handler.function(client, Discord);
 event_handler.function(client, Discord);
 
 // Logging in the client from the dotenv config
-// eslint-disable-next-line no-undef
 client.login(process.env.token);
