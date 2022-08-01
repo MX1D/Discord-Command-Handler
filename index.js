@@ -23,5 +23,5 @@ await command_handler.function(client, Discord);
 await slashCommands_handler.function(client, Discord);
 event_handler.function(client, Discord);
 
-// Logging in the client from the dotenv config
-client.login(process.env.token);
+// Logging in the client from the config
+client.login(client.config.token);
