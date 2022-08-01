@@ -24,7 +24,7 @@ export default {
 				if (!message.member.roles.cache.has(command.roleRequired) && !message.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) return message.channel.send(`:x: **You don't have the required role!**`);
 			}
 			if (client.cooldowns.find((a) => a.command == command.name && a.user == message.author.id)) {
-				const embed = new Discord.MessageEmbed()
+				const embed = new Discord.EmbedBuilder()
 					.setColor("RED")
 					.setTitle("Cooldown")
 					.setDescription(`:x: **You can use this command again <t:${ client.cooldowns.find((a) => a.command == command.name && a.user == message.author.id).until }:R>**`)
