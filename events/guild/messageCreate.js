@@ -25,7 +25,7 @@ export default {
 			}
 			if (client.cooldowns.find((a) => a.command == command.name && a.user == message.author.id)) {
 				const embed = new Discord.EmbedBuilder()
-					.setColor("RED")
+					.setColor("#FF0000")
 					.setTitle("Cooldown")
 					.setDescription(`:x: **You can use this command again <t:${ client.cooldowns.find((a) => a.command == command.name && a.user == message.author.id).until }:R>**`)
 					.setTimestamp()
