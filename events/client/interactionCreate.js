@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-import { error, log } from "../../utils/logging.js";
+import { log } from "../../utils/logging.js";
+import { InteractionType } from "discord.js";
 import colors from "colors";
 
 export default {
@@ -7,7 +7,7 @@ export default {
 	description: "client on interaction create event, using for slash commands",
 	once: false,
 	function: async function (client, Discord, interaction) {
-		if (!interaction.isCommand()) return;
+		if (!interaction.type !== InteractionType.ApplicationCommand) return;
 		const cmd = interaction.commandName;
 		const command = client.slashCommands.get(cmd);
 		if (command) {
