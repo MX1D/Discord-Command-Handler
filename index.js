@@ -1,6 +1,7 @@
 // Package imports
 import Discord, { GatewayIntentBits } from "discord.js";
 import { readFileSync, writeFileSync } from "fs";
+import { error } from "./utils/logging.js";
 
 // Initilazing the client
 const client = new Discord.Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
@@ -22,6 +23,10 @@ client.slashCommands = new Discord.Collection();
 await command_handler.function(client, Discord);
 await slashCommands_handler.function(client, Discord);
 event_handler.function(client, Discord);
+
+// Catching all the errors
+process.on("uncaughtException", error);
+process.on("unhandledRejection", error);
 
 // Logging in the client from the config
 client.login(client.config.token);
