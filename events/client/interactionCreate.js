@@ -12,7 +12,7 @@ export default {
 		const cmd = interaction.commandName;
 		const command = client.slashCommands.get(cmd);
 		if (command) {
-			if (command.permissions.length) {
+			if (command.permissions) {
 				const invalidPerms = [];
 				for (const perm of command.permissions) {
 					if (!interaction.member.permissions.has(Discord.PermissionsBitField.Flags[perm])) invalidPerms.push(perm);
