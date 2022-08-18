@@ -1,13 +1,14 @@
 import { log } from "../../utils/logging.js";
 import colors from "colors";
+import { InteractionType } from "discord.js";
 
 export default {
 	name: "interactionCreate",
 	description: "client on interaction create event, using for slash commands",
 	once: false,
 	function: async function (client, Discord, interaction) {
-		if (interaction.type !== 1) return;
-        if (interaction.isUserContextMenuCommand()) return;
+		if (interaction.type !== InteractionType.ApplicationCommand) return;
+        if (interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand()) return;
 		const cmd = interaction.commandName;
 		const command = client.slashCommands.get(cmd);
 		if (command) {

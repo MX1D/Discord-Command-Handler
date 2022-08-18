@@ -5,7 +5,7 @@ export default {
     name: "interactionCreate",
     once: false,
     function: async function (client, Discord, interaction) {
-        if (interaction.type !== 2 && interaction.type !== 3) return;
+        if (!interaction.isUserContextMenuCommand() && !interaction.isMessageContextMenuCommand()) return;
 		const command = client.contextMenus.get(interaction.commandName);
         if (command) {
             command.function({ client, Discord, interaction });
