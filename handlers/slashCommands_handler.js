@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import fs from "fs";
 
 export default {
-	function: async function (client, Discord) {
+	function: async function (client) {
 		const command_files = fs.readdirSync("./slashCommands/");
 
 		for (const file of command_files) {

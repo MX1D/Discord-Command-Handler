@@ -5,21 +5,20 @@ export default {
 	name: "ready",
 	description: "client ready event",
 	once: false,
-	// eslint-disable-next-line no-unused-vars
-	function: function (client, Discord) {
+	function: function (client) {
 		log(`Logged in as ${ colors.red(client.user.tag) }`);
 
-		client.guilds.cache.forEach(guild => {
-			let commands;
-			if (guild) {
-				commands = guild.commands;
-			} else {
-				commands = client.application.commands;
+		client.guilds.cache.forEach(async guild => {
+			const cmds = [];
+			const pushCmds = (type) => {
+				for (const i of client[type]) {
+					if (!i[1].name) return;
+					cmds.push(i[1]);
+				}
 			}
-
-			for (const i of client.slashCommands) {
-				commands.create({ name: i[1].name, description: i[1].description, options: i[1].options });
-			}
+			pushCmds("slashCommands");
+			pushCmds("contextMenus");
+			await guild.commands.set(cmds);
 		});
 	}
 };

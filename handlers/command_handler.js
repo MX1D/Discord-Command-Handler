@@ -1,15 +1,21 @@
 import fs from "fs";
 
 export default {
-	// eslint-disable-next-line no-unused-vars
-	function: async function (client, Discord) {
-		const command_files = fs.readdirSync("./commands/").filter(file => file.endsWith(".js"));
+	function: async function (client) {
+		const command_files = fs.readdirSync("./commands/");
 
 		for (const file of command_files) {
-			const command = await import(`../commands/${ file }`);
-			if (command.default.name) {
+			if (file.endsWith(".js")) {
+				var command = await import(`../commands/${ file }`);
 				client.commands.set(command.default.name, command.default);
-			} else {
+			}
+			if (fs.statSync(`./commands/${ file }`).isDirectory()) {
+				fs.readdirSync(`./commands/${ file }`).forEach(async cmd => {
+					if (cmd.endsWith(".js")) {
+						const command = await import(`../commands/${ file }/${ cmd }`);
+						client.commands.set(command.default.name, command.default);
+					}
+				});
 				continue;
 			}
 		}
