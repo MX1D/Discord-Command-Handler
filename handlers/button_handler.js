@@ -6,7 +6,7 @@ export default {
 
         for (const file of button_files) {
             if (file.endsWith(".js")) {
-                var button = await import(`../buttons/${ file }`);
+                const button = await import(`../buttons/${ file }`);
                 client.buttons.set(button.default.id, button.default);
             }
             if (fs.statSync(`./buttons/${ file }`).isDirectory()) {

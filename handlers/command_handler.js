@@ -6,7 +6,7 @@ export default {
 
 		for (const file of command_files) {
 			if (file.endsWith(".js")) {
-				var command = await import(`../commands/${ file }`);
+				const command = await import(`../commands/${ file }`);
 				client.commands.set(command.default.name, command.default);
 			}
 			if (fs.statSync(`./commands/${ file }`).isDirectory()) {

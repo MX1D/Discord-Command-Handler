@@ -9,7 +9,7 @@ export default {
 		const command = client.contextMenus.get(interaction.commandName);
         if (command) {
             command.function({ client, Discord, interaction });
-			log(`[Context menu clicked] ${ interaction.commandName } ${ colors.blue("||") } Author: ${ interaction.user.username } ${ colors.blue("||") } ID: ${ interaction.user.id } ${ colors.blue("||") } Server: ${ interaction.guild.name }`); // logging that there is a command that just ran
+			log(`[Context menu clicked] ${ interaction.commandName } ${ colors.blue("||") } Author: ${ interaction.user.username } ${ colors.blue("||") } ID: ${ interaction.user.id } ${ colors.blue("||") } Server: ${ interaction.guild.name }`);
         }
     }
 }

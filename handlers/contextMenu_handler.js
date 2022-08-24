@@ -6,7 +6,7 @@ export default {
 
         for (const file of menu_files) {
             if (file.endsWith(".js")) {
-                var menu = await import(`../contextMenus/${ file }`);
+                const menu = await import(`../contextMenus/${ file }`);
                 if (menu.default.type.toLowerCase() == "user") menu.default.type = 2;
                 else if (menu.default.type.toLowerCase() == "message") menu.default.type = 3;
                 client.contextMenus.set(menu.default.name, menu.default);
