@@ -34,7 +34,7 @@ export default {
 			}
 			command.function({ client, message, args, Discord }); // running the command code
 			log(`[Command ran] ${ message.content } ${ colors.blue("||") } Author: ${ message.author.username } ${ colors.blue("||") } ID: ${ message.author.id } ${ colors.blue("||") } Server: ${ message.guild.name }`); // logging that there is a command that just ran
-			if (command.cooldown && !message.member.permissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+			if (command.cooldown && !message.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
 				client.cooldowns.push({ user: message.author.id, command: command.name, until: Math.round((Date.now() + command.cooldown) / 1000) });
 				setTimeout(() => {
 					client.cooldowns.splice(client.cooldowns.indexOf(client.cooldowns.find((a) => a.user === message.author.id && a.command === command.name)), 1);
