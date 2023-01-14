@@ -1,11 +1,12 @@
-import { log } from "../../utils/logging.js";
 import colors from "colors";
+import { log } from "../../utils/logging.js";
+import { client } from "../../index.js";
 
 export default {
 	name: "messageCreate",
 	description: "Client on recieve message event",
 	once: false,
-	function: function (client, Discord, message) {
+	function: function (Discord, message) {
 		if (!client.config.prefix) return;
 		if (message.author.bot) return;
 		if (!message.content.startsWith(client.config.prefix)) return; // prefix ;-;

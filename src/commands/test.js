@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+// import { client } from "../index.js";
+
 export default {
 	name: "test",
 	aliases: ["t"],
@@ -6,7 +8,8 @@ export default {
 	permissions: ["Administrator"],
 	roleRequired: "", // id here
 	cooldown: 0, // in ms
-	function: function ({ client, message, args, Discord }) {
+	function: async function ({ message, args, Discord }) {
+        const { client } = await import("../index.js");
 		message.channel.send("HeLlo!");
 	}
 };
