@@ -5,8 +5,6 @@ import { client } from "../../index.js";
 import { readdirSync, statSync } from "fs";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v10";
-import { initServer, renewKey } from "../../server/express.js";
-import { getGiveaways, getMembers, removeGiveaway } from "../../handlers/databaseHandler.js";
 
 export default {
 	name: "ready",
@@ -14,36 +12,6 @@ export default {
 	once: false,
 	function: async function () {
 		log(`Logged in as ${ colors.red(client.user.tag) }`);
-		
-		initServer();
-
-		setInterval(async () => {
-			config.groups.forEach(async group => {
-				const members = await getMembers(group);
-				members.forEach(async member => {
-					if (member.expires_in < 518400) {
-						renewKey(member, group);
-					}
-				});
-			});
-		}, 60000);
-
-		setInterval(async () => {
-			const giveaways = await getGiveaways();
-			giveaways.forEach(async giveaway => {
-				if (Date.now() > giveaway.time) {
-					const channel = await client.channels.fetch(giveaway.channelId);
-					if (channel) {
-						const message = await channel.messages.fetch(giveaway.messageId);
-						if (message) {
-							await message.edit({ content: "🎉🎉 **GIVEAWAY ENDED!** 🎉🎉", components: [] });
-							await message.reply({ content: `🎉🎉 **Congratulations <@${ giveaway.winnerId }>, you won the giveaway!** 🎉🎉` });
-							await removeGiveaway(giveaway);
-						}
-					}
-				}
-			});
-		}, 5000);
 
 		const commands = [];
 		const registerDir = async (dirName) => {
@@ -71,7 +39,6 @@ export default {
 		};
 
 		await registerDir("slashCommands");
-		await registerDir("commands");
 		
 		const rest = new REST({ version: '10' }).setToken(config.token);
 		rest
