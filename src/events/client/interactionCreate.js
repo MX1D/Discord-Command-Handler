@@ -1,13 +1,13 @@
 import colors from "colors";
 import { log } from "../../utils/logging.js";
-import { InteractionType } from "discord.js";
+import { EmbedBuilder, InteractionType, PermissionsBitField } from "discord.js";
 import { client } from "../../index.js";
 
 export default {
 	name: "interactionCreate",
 	description: "client on interaction create event, using for slash commands",
 	once: false,
-	function: async function (Discord, interaction) {
+	function: async function (interaction) {
 		if (interaction.type !== InteractionType.ApplicationCommand) return;
         if (interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand()) return;
 		const cmd = interaction.commandName;
@@ -16,15 +16,15 @@ export default {
 			if (command.permissions) {
 				const invalidPerms = [];
 				for (const perm of command.permissions) {
-					if (!interaction.member.permissions.has(Discord.PermissionsBitField.Flags[perm])) invalidPerms.push(perm);
+					if (!interaction.member.permissions.has(PermissionsBitField.Flags[perm])) invalidPerms.push(perm);
 				}
 				if (invalidPerms.length) return interaction.reply({ content: `Missing Permissions: \`${ invalidPerms + "".replace(/,/g, ", ") }\`` });
 			}
 			if (command.roleRequired) {
-				if (!interaction.member.roles.cache.has(command.roleRequired) && !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) return interaction.reply(`:x: **You don't have the required role!**`);
+				if (!interaction.member.roles.cache.has(command.roleRequired) && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(`:x: **You don't have the required role!**`);
 			}
 			if (client.cooldowns.find((a) => a.command == command.name && a.user == interaction.user.id)) {
-				const embed = new Discord.EmbedBuilder()
+				const embed = new EmbedBuilder()
 					.setColor("#FF0000")
 					.setTitle("Cooldown")
 					.setDescription(`:x: **You can use this command again <t:${ client.cooldowns.find((a) => a.command == command.name && a.user == interaction.user.id).until }:R>**`)
@@ -33,9 +33,9 @@ export default {
 				return interaction.reply({ embeds: [embed] });
 			}
 			const { options } = interaction;
-			command.function({ client, Discord, interaction, options });
+			command.function({ client, interaction, options });
 			log(`[Command ran] ${ interaction.commandName } ${ colors.blue("||") } Author: ${ interaction.user.username } ${ colors.blue("||") } ID: ${ interaction.user.id } ${ colors.blue("||") } Server: ${ interaction.guild.name }`); // logging that there is a command that just ran
-			if (command.cooldown && !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
+			if (command.cooldown && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
 				client.cooldowns.push({ user: interaction.user.id, command: command.name, until: Math.round((Date.now() + command.cooldown) / 1000) });
 				setTimeout(() => {
 					client.cooldowns.splice(client.cooldowns.indexOf(client.cooldowns.find((a) => a.user === interaction.user.id && a.command === command.name)), 1);
