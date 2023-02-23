@@ -8,7 +8,7 @@ export default {
 	permissions: ["Administrator"],
 	roleRequired: "", // id here
 	cooldown: 0, // in ms
-	function: async function ({ message, args, Discord }) {
+	function: async function ({ message, args }) {
         const { client } = await import("../index.js");
 		message.channel.send("HeLlo!");
 	}

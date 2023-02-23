@@ -8,7 +8,7 @@ export default {
 	roleRequired: "", // id here
 	cooldown: 0, // in ms
 	options: [{ name: "what", description: "you want what?", required: true, type: ApplicationCommandOptionType.String }],
-	function: async function ({ Discord, interaction, options }) {
+	function: async function ({ interaction, options }) {
         const { client } = await import("../index.js");
 		interaction.reply({ content: `you said: ${ options.getString("what") }` });
 	}
