@@ -21,7 +21,8 @@ export default {
 				if (invalidPerms.length) return interaction.reply({ content: `Missing Permissions: \`${ invalidPerms + "".replace(/,/g, ", ") }\`` });
 			}
 			if (command.roleRequired) {
-				if (!interaction.member.roles.cache.has(command.roleRequired) && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(`:x: **You don't have the required role!**`);
+				const role = await interaction.guild.roles.fetch(command.roleRequired);
+				if (!interaction.member.roles.cache.has(role.id) && interaction.member.roles.highest.comparePositionTo(role) < 0 && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.channel.send(`:x: **You don't have the required role!**`);
 			}
 			if (client.cooldowns.find((a) => a.command == command.name && a.user == interaction.user.id)) {
 				const embed = new EmbedBuilder()

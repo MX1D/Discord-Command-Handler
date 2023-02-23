@@ -8,7 +8,7 @@ export default {
 	name: "messageCreate",
 	description: "Client on recieve message event",
 	once: false,
-	function: function (message) {
+	function: async function (message) {
 		if (!config.prefix) return;
 		if (message.author.bot) return;
 		if (!message.content.startsWith(config.prefix)) return; // prefix ;-;
@@ -24,7 +24,8 @@ export default {
 				if (invalidPerms.length) return message.channel.send(`Missing Permissions: \`${ invalidPerms + "".replace(/,/g, ", ") }\``);
 			}
 			if (command.roleRequired) {
-				if (!message.member.roles.cache.has(command.roleRequired) && !message.member.permissions.has(PermissionsBitField.Flags.Administrator)) return message.channel.send(`:x: **You don't have the required role!**`);
+				const role = await message.guild.roles.fetch(command.roleRequired);
+				if (!message.member.roles.cache.has(role.id) && message.member.roles.highest.comparePositionTo(role) < 0 && !message.member.permissions.has(PermissionsBitField.Flags.Administrator)) return message.channel.send(`:x: **You don't have the required role!**`);
 			}
 			if (client.cooldowns.find((a) => a.command == command.name && a.user == message.author.id)) {
 				const embed = new EmbedBuilder()
